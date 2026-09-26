@@ -13,6 +13,11 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasUuids;
 
+    protected $table = 'users';
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'username',
         'email',
@@ -37,6 +42,18 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function isCustomer(): bool { return $this->role === 'customer'; }
+    public function isDesigner(): bool { return $this->role === 'designer'; }
+    public function isAdmin(): bool { return $this->role === 'admin'; }
+
+    public function home(): string
+    {
+        return match ($this->role) {
+            'designer' => route('designer.dashboard'),
+            'admin'    => route('admin.dashboard'),
+            default    => route('customer.beranda'),
+        };
+    }
     // ==== Relasi ====
 
     public function designerStat(): HasOne
@@ -97,22 +114,5 @@ class User extends Authenticatable
     public function activityLogs(): HasMany
     {
         return $this->hasMany(ActivityLog::class, 'user_id');
-    }
-
-    // ==== Helper ====
-
-    public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
-    }
-
-    public function isDesigner(): bool
-    {
-        return $this->role === 'designer';
-    }
-
-    public function isCustomer(): bool
-    {
-        return $this->role === 'customer';
     }
 }

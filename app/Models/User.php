@@ -56,9 +56,9 @@ class User extends Authenticatable
     }
     // ==== Relasi ====
 
-    public function designerStat(): HasOne
+    public function designerStats(): HasOne
     {
-        return $this->hasOne(DesignerStat::class, 'designer_id');
+        return $this->hasOne(DesignerStats::class, 'designer_id');
     }
 
     public function customerOrders(): HasMany

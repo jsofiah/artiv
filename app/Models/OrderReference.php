@@ -22,11 +22,6 @@ class OrderReference extends Model
         'note',
     ];
 
-    protected $casts = [
-        // file_size di schema bertipe uuid (kemungkinan salah desain,
-        // idealnya bigint). Biarkan default string.
-    ];
-
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

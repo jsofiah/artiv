@@ -11,6 +11,11 @@ class Payment extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $table = 'payments';
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+
     protected $fillable = [
         'order_id',
         'method',

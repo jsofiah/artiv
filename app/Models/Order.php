@@ -106,4 +106,9 @@ class Order extends Model
     {
         return $this->hasOne(Review::class);
     }
+
+        public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
 }

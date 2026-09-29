@@ -11,10 +11,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', function () {
     if (!Auth::check()) {
         return redirect()->route('customer.beranda');
@@ -32,12 +28,9 @@ Route::get('/', function () {
 Route::prefix('customer')->name('customer.')->group(function () {
 
     // Halaman publik
-    Route::get('/beranda', [BerandaController::class, 'index'])
-        ->name('beranda');
-
-    Route::get('/katalog', [BerandaController::class, 'katalog'])
-        ->name('katalog');
-
+    Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda');
+    Route::get('/katalog', [BerandaController::class, 'katalog'])->name('katalog');
+    Route::get('/katalog/{product}', [BerandaController::class, 'detailKatalog'])->name('katalog.detail');
 
     // Halaman wajib login + role customer
     Route::middleware(['auth', 'role:customer'])->group(function () {

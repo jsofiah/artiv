@@ -179,16 +179,63 @@ class PemesananController extends Controller
     }
 
     public function konfirmasi(Request $request, Product $product)
-{
-    $pemesananData = session('pemesanan_data');
-    $references = session('pemesanan_references', []);
+    {
+        $pemesananData = session('pemesanan_data');
+        $references = session('pemesanan_references', []);
 
-    if (!$pemesananData) {
-        return redirect()
-            ->route('customer.pemesanan.create', $product->id)
-            ->withErrors(['error' => 'Sesi pemesanan telah berakhir. Silakan isi ulang.']);
+        if (!$pemesananData) {
+            return redirect()
+                ->route('customer.pemesanan.create', $product->id)
+                ->withErrors(['error' => 'Sesi pemesanan telah berakhir. Silakan isi ulang.']);
+        }
+
+        if ($pemesananData['product_id'] !== $product->id) {
+            return redirect()
+                ->route('customer.pemesanan.create', $product->id)
+                ->withErrors(['error' => 'Data pemesanan tidak sesuai.']);
+        }
+
+        DB::beginTransaction();
+        try {
+            $order = Order::create([
+                'order_code' => 'ARTIV-' . strtoupper(Str::random(8)),
+                'customer_id' => Auth::id(),
+                'designer_id' => null,
+                'product_id' => $product->id,
+                'product_tier_id' => $pemesananData['product_tier_id'],
+                'unit_price' => $pemesananData['unit_price'],
+                'quantity' => $pemesananData['quantity'],
+                'deadline' => $pemesananData['deadline'],
+                'is_express' => $pemesananData['is_express'],
+                'express_fee_id' => $pemesananData['express_fee_id'],
+                'express_fee' => $pemesananData['express_fee'],
+                'brief_note' => $pemesananData['brief_note'],
+                'total_price' => $pemesananData['total_price'],
+                'status' => 'pending', // Menunggu Pembayaran
+            ]);
+
+            foreach ($references as $ref) {
+                OrderReference::create([
+                    'order_id' => $order->id,
+                    'type' => $ref['type'],
+                    'file_url' => $ref['file_url'] ?? null,
+                    'file_name' => $ref['file_name'] ?? null,
+                    'file_size' => $ref['file_size'] ?? null,
+                    'mime_type' => $ref['mime_type'] ?? null,
+                    'external_url' => $ref['external_url'] ?? null,
+                ]);
+            }
+            session()->forget(['pemesanan_data', 'pemesanan_references']);
+
+            DB::commit();
+
+            return redirect()
+                ->route('customer.pesanan.pembayaran.show', $order->id)
+                ->with('status', 'Pesanan berhasil dibuat. Silakan lanjutkan pembayaran.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Gagal memproses: ' . $e->getMessage()]);
+        }
     }
-
-    return redirect()->route('customer.pembayaran.show', $product->id);
-}
 }

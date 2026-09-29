@@ -34,7 +34,7 @@ class PembayaranController extends Controller
                 ->with('info', 'Pesanan ini sudah lunas.');
         }
 
-        return view('customer.pembayaran', compact('order'));
+        return view('customer.pemesanan.pembayaran', compact('order'));
     }
 
     /**

@@ -131,16 +131,22 @@
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
                     <button type="button" @click="decrementQty()"
-                            class="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition active:scale-95">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            class="w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/>
                         </svg>
                     </button>
-                    <input type="number" name="quantity" x-model.number="quantity" min="1" readonly
-                            class="w-12 h-9 text-center border border-slate-200 rounded-lg font-bold text-slate-900 focus:outline-none">
+
+                    {{-- Input angka — pakai div supaya tidak ada spinner --}}
+                    <div class="w-14 h-10 flex items-center justify-center border border-slate-200 rounded-lg font-bold text-slate-900"
+                        x-text="quantity"></div>
+
+                    {{-- Hidden input untuk form submit --}}
+                    <input type="hidden" name="quantity" :value="quantity">
+
                     <button type="button" @click="incrementQty()"
-                            class="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition active:scale-95">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            class="w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
                         </svg>
                     </button>

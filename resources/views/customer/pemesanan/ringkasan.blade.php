@@ -230,7 +230,7 @@
                     Kembali ke Form Pemesanan
                 </a>
             </div>
-}
+            
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
                 <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-4">ALUR LANGKAH SELANJUTNYA:</p>
                 <ol class="space-y-3">

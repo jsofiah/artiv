@@ -27,10 +27,8 @@ Route::get('/', function () {
     };
 });
 
-
 // ============ CUSTOMER (bisa diakses guest) ============
 Route::prefix('customer')->name('customer.')->group(function () {
-
     // Halaman publik
     Route::get('/beranda', [BerandaController::class, 'index'])
         ->name('beranda');
@@ -38,11 +36,12 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('/katalog', [BerandaController::class, 'katalog'])
         ->name('katalog');
 
+    Route::get('/katalog/{product}', [BerandaController::class, 'detailKatalog'])
+        ->name('katalog.detail');
 
     // Halaman wajib login + role customer
     Route::middleware(['auth', 'role:customer'])->group(function () {
-
-        // ==================== PESANAN ====================
+        // Pesanan
         Route::get('/pesanan', [PesananController::class, 'index'])
             ->name('pesanan');
 
@@ -52,52 +51,35 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::post('/pesanan/{order}/pesan', [PesananController::class, 'kirimPesan'])
             ->name('pesanan.kirimPesan');
 
-        Route::get(
-            '/pesanan/{order}/reference/{reference}/download',
-            [PesananController::class, 'downloadReference']
-        )->name('pesanan.reference.download');
+        Route::get('/pesanan/{order}/reference/{reference}/download',
+            [PesananController::class, 'downloadReference'])
+            ->name('pesanan.reference.download');
 
-        Route::get(
-            '/pesanan/{order}/attachment/{attachment}/download',
-            [PesananController::class, 'downloadAttachment']
-        )->name('pesanan.attachment.download');
+        Route::get('/pesanan/{order}/attachment/{attachment}/download',
+            [PesananController::class, 'downloadAttachment'])
+            ->name('pesanan.attachment.download');
 
+        // ============ PEMESANAN ============
+        Route::get('/pemesanan/{product}', [PemesananController::class, 'create'])
+            ->name('pemesanan.create');
 
-        // ==================== PEMESANAN ====================
-        Route::get(
-            '/pemesanan/{product}',
-            [PemesananController::class, 'create']
-        )->name('pemesanan.create');
+        Route::post('/pemesanan/{product}/ringkasan', [PemesananController::class, 'ringkasan'])
+            ->name('pemesanan.ringkasan');
 
-        Route::post(
-            '/pemesanan/{product}/ringkasan',
-            [PemesananController::class, 'ringkasan']
-        )->name('pemesanan.ringkasan');
+        Route::get('/pemesanan/{product}/ringkasan', [PemesananController::class, 'showRingkasan'])
+            ->name('pemesanan.ringkasan.show');
 
-        Route::get(
-            '/pemesanan/{product}/ringkasan',
-            [PemesananController::class, 'showRingkasan']
-        )->name('pemesanan.ringkasan.show');
+        Route::post('/pemesanan/{product}/konfirmasi', [PemesananController::class, 'konfirmasi'])
+            ->name('pemesanan.konfirmasi');
 
-        Route::post(
-            '/pemesanan/{product}/konfirmasi',
-            [PemesananController::class, 'konfirmasi']
-        )->name('pemesanan.konfirmasi');
-
-
-        // ==================== PEMBAYARAN ====================
-        Route::get(
-            '/pesanan/{order}/pembayaran',
-            [PembayaranController::class, 'show']
-        )->name('pesanan.pembayaran');
-
-        Route::post(
-            '/pesanan/{order}/pembayaran',
-            [PembayaranController::class, 'store']
-        )->name('pesanan.pembayaran.store');
+        // ============ PEMBAYARAN ============
+        Route::get('/pesanan/{order}/pembayaran', [PembayaranController::class, 'show'])
+            ->name('pesanan.pembayaran.show');
+            
+        Route::post('/pesanan/{order}/pembayaran', [PembayaranController::class, 'store'])
+            ->name('pesanan.pembayaran.store');
     });
 });
-
 
 // ============ ROUTE WAJIB LOGIN ============
 Route::middleware('auth')->group(function () {

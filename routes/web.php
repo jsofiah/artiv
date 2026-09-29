@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\BerandaController;
 use App\Http\Controllers\Customer\PesananController;
+use App\Http\Controllers\Customer\PembayaranController;
 use App\Http\Controllers\Designer\DashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,14 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/pesanan/{order}/attachment/{attachment}/download',
             [PesananController::class, 'downloadAttachment'])
             ->name('pesanan.attachment.download');
+
+        Route::get('/pesanan/{order}/pembayaran', 
+            [PembayaranController::class, 'show'])
+            ->name('pesanan.pembayaran');
+
+        Route::post('/pesanan/{order}/pembayaran', 
+            [PembayaranController::class, 'store'])
+            ->name('pesanan.pembayaran.store');
 
     });
 });

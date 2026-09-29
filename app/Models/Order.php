@@ -111,4 +111,27 @@ class Order extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    // ==== Accessor untuk tampilan progres ====
+
+    public function getProgressAttribute(): array
+    {
+        // GANTI/lengkapi key ini kalau ada status lain di database
+        $map = [
+            'pending'         => [1, 'Brief Diterima'],
+            'in_progress'     => [2, 'Eksplorasi Konsep'],
+            'revision_needed' => [2, 'Revisi'],
+            'finishing'       => [3, 'Finishing'],
+            'completed'       => [3, 'Selesai'],
+        ];
+
+        [$step, $label] = $map[$this->status]
+            ?? [1, ucfirst(str_replace('_', ' ', $this->status))];
+
+        return [
+            'step'    => $step,
+            'label'   => $label,
+            'percent' => round($step / 3 * 100),
+        ];
+    }
 }

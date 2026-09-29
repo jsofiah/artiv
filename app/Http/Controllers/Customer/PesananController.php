@@ -20,16 +20,25 @@ use Illuminate\Support\Facades\Log;
 
 class PesananController extends Controller
 {
-    /* Daftar semua pesanan milik customer yang login. */
-    public function index(): View
-    {
-        $orders = Order::with(['product', 'productTier', 'designer'])
-            ->where('customer_id', Auth::id())
-            ->orderByDesc('created_at')
-            ->get();
+       /* Daftar semua pesanan milik customer yang login. */
+public function index(Request $request): View
+{
+    $tab = $request->query('tab', 'aktif');
+    // GANTI kalau ada nilai status lain untuk pesanan selesai/dibatalkan
+    $selesai = ['completed', 'cancelled'];
 
-        return view('customer.pesanan', compact('orders'));
-    }
+    $base = Order::with(['product', 'productTier', 'designer'])
+        ->where('customer_id', Auth::id());
+
+    $countAktif   = (clone $base)->whereNotIn('status', $selesai)->count();
+    $countRiwayat = (clone $base)->whereIn('status', $selesai)->count();
+
+    $orders = $tab === 'riwayat'
+        ? (clone $base)->whereIn('status', $selesai)->latest()->get()
+        : (clone $base)->whereNotIn('status', $selesai)->orderByDesc('created_at')->get();
+
+    return view('customer.pesanan', compact('orders', 'tab', 'countAktif', 'countRiwayat'));
+}
 
     /* Detail pesanan + chat. */
     public function show(string $order): View

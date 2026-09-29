@@ -14,6 +14,19 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                primary: {
+                    DEFAULT: '#745BB8',
+                    dark: '#6349a8',
+                },
+                ink: '#1A1824',
+                muted: '#6C687D',
+                neutral: '#6B7280',
+                line: '#D8D3E3',
+                surface: '#E9E7EE',
+                star: '#F59E0B',
+                lime: '#D4F94E', // GANTI dengan warna lime dari Figma
+            },
         },
     },
 

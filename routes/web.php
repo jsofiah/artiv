@@ -5,6 +5,7 @@ use App\Http\Controllers\Customer\BerandaController;
 use App\Http\Controllers\Customer\PesananController;
 use App\Http\Controllers\Customer\PembayaranController;
 use App\Http\Controllers\Designer\DashboardController;
+use App\Http\Controllers\Designer\PekerjaanController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -69,9 +70,18 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:designer')->prefix('designer')->name('designer.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/job-pool', [DashboardController::class, 'jobPool'])->name('job-pool');
-        Route::get('/pekerjaan-saya', [DashboardController::class, 'pekerjaanSaya'])->name('pekerjaan-saya');
+        Route::get('/pekerjaan-saya', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
+        Route::get('/pekerjaan-saya/{order}', [PekerjaanController::class, 'show'])->name('pekerjaan.show');
+        Route::post('/pekerjaan-saya/{order}/pesan', [PekerjaanController::class, 'kirimPesan'])->name('pekerjaan.kirimPesan');
         Route::get('/notifikasi', [DashboardController::class, 'notifikasi'])->name('notifikasi');
         Route::get('/riwayat', [DashboardController::class, 'riwayat'])->name('riwayat');
+
+        Route::get('/pekerjaan-saya/{order}/attachment/{attachment}/download',
+            [PekerjaanController::class, 'downloadAttachment'])
+            ->name('pekerjaan.attachment.download');
+        Route::get('/pekerjaan-saya/{order}/reference/{reference}/download',
+            [PekerjaanController::class, 'downloadReference'])
+            ->name('pekerjaan.reference.download');
     });
 
     // Admin

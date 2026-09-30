@@ -2,7 +2,7 @@
     $menus = [
         ['label' => 'Dashboard',          'route' => 'designer.dashboard',        'icon' => 'grid'],
         ['label' => 'Job Pool',           'route' => 'designer.job-pool',         'icon' => 'briefcase'],
-        ['label' => 'Pekerjaan Saya',     'route' => 'designer.pekerjaan-saya',   'icon' => 'check'],
+        ['label' => 'Pekerjaan Saya',     'route' => 'designer.pekerjaan.index',   'icon' => 'check'],
         ['label' => 'Riwayat Pekerjaan',  'route' => 'designer.riwayat',          'icon' => 'history'],
     ];
 @endphp

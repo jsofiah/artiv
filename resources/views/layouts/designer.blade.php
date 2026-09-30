@@ -18,13 +18,13 @@
 </head>
 <body class="bg-[#F3F1FA] antialiased">
 
-    <div class="flex min-h-screen">
+    <div class="flex h-screen overflow-hidden">
 
         {{-- Sidebar --}}
         <x-designer.sidebar />
 
         {{-- Main area --}}
-        <div class="flex-1 flex flex-col min-w-0">
+        <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
 
             {{-- Topbar --}}
             <header class="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-6 sticky top-0 z-30">
@@ -39,7 +39,7 @@
             </header>
 
             {{-- Content --}}
-            <main class="flex-1 p-6">
+            <main class="flex-1 p-6 overflow-y-auto">
                 @yield('content')
             </main>
 
